@@ -65,9 +65,9 @@ Show a table: `# | file | length | topic (one line)`, recommend the strongest 3-
 
 ## 5. Render videos
 
-For each chosen clip write a short, curiosity-driven title (max ~35 characters, fits 2 lines; take it from the clip's own words). Read the clip's `.json` and put Whisper mistakes (names, technical terms, nonsense words) into `<scratch>/fixes.json`: `{"wrong": "right", "filler.": ""}`. Mention corrections you're unsure about.
+For each chosen clip write a short, punchy title: aim for one line (~25 characters), never more than ~35 (two lines). A claim or question beats a summary ("AI içerik = saygısızlık?", not "Yapay zekayla yazılan içerik hakkında"); take it from the clip's own words. Read the clip's `.json` and put Whisper mistakes (names, technical terms, nonsense words) into `<scratch>/fixes.json`: `{"wrong": "right", "filler.": ""}`. Mention corrections you're unsure about.
 
-Label: `<SHOW NAME> · <episode label> · <GUEST FIRST NAME>` in capitals, episode label from `podcast.json`'s `episode_label` with season/episode taken from the folder name (`s02e01-jane` → `S2E1`) or asked.
+Label: `<Show name> · <episode label> · <Guest full name>` (the script capitalizes it), episode label from `podcast.json`'s `episode_label` with season/episode taken from the folder name (`s02e01-jane` → `S2E1`) or asked.
 
 ```bash
 mkdir -p clips/video && <python> -I <scripts>/render_clip.py \

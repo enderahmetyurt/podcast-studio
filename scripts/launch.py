@@ -36,14 +36,14 @@ END_CARD, FADE = 4.8, 1.8                  # end card length, music fade-out
 # Layouts per format (y coordinates in pixels)
 LAYOUT = {
     "4x5": dict(H=1350, logo=200, logo_y=40, text_mid=660, font=100, lh=120, maxw=960,
-                name_y=1150, sub_y=1215, bar_y=1275, card_logo=180, card_logo_y=30, cover_w=880, cover_y=250, cover_h=560,
+                name_y=1150, sub_y=1215, bar_y=1275, card_logo=180, card_logo_y=30, cover_w=880, cover_y=250, cover_h=720,
                 title_font=66, title_lh=82, guest_font=58, site_y=1220),
     "9x16": dict(H=1920, logo=240, logo_y=170, text_mid=920, font=112, lh=132, maxw=940,
                  name_y=1600, sub_y=1670, bar_y=1760, card_logo=220, card_logo_y=260, cover_w=960, cover_y=540, cover_h=820,
                  title_font=76, title_lh=96, guest_font=68, site_y=1700),
     # Instagram story: 9:16 with the top ~250 px (profile bar) and bottom ~340 px (reply box) kept clear
     "story": dict(H=1920, logo=220, logo_y=280, text_mid=900, font=112, lh=132, maxw=940,
-                  name_y=1400, sub_y=1465, bar_y=1530, card_logo=190, card_logo_y=275, cover_w=860, cover_y=500, cover_h=560,
+                  name_y=1400, sub_y=1465, bar_y=1530, card_logo=190, card_logo_y=275, cover_w=860, cover_y=500, cover_h=690,
                   title_font=72, title_lh=90, guest_font=64, site_y=1520),
 }
 W = 1080
@@ -128,7 +128,9 @@ def build_audio():
     json.dump({"timeline": timeline, "speech_end": speech_end, "total": total}, open(TIMELINE, "w"), indent=1)
 
     # words draft
-    _, segs = transcribe(AUDIO, LANG, words=True)
+    # Transcribe the speech-only track: over the full-volume intro music Whisper hears
+    # "no speech" for the first window and drops the opening quotes.
+    _, segs = transcribe(f"{WORK}/speech.wav", LANG, words=True)
     ws = [(w["w"], w["s"], w["e"]) for s in segs for w in s["words"]]
     # Whisper can place words early at quote starts; assign each word to the quote nearest its midpoint
     draft = [[] for _ in timeline]

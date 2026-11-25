@@ -102,7 +102,10 @@ def background():
     d.rounded_rectangle(((W - cw) // 2 - 4, cy - 4, (W + cw) // 2 + 4, cy + card.height + 4), 40,
                         outline=C["accent"], width=4)
 
-    d.text((W / 2, 250), args.label, font=ImageFont.truetype(FONT_LABEL, 34), fill=C["secondary"], anchor="mm")
+    # The show name is a brand: plain uppercase (Enderinko → ENDERINKO, not ENDERİNKO).
+    label_text = " · ".join(x.upper() if x.strip() == SHOW.get("name", "").strip() else upper(x, LANG)
+                             for x in args.label.split(" · "))
+    d.text((W / 2, 250), label_text, font=ImageFont.truetype(FONT_LABEL, 34), fill=C["secondary"], anchor="mm")
     tf = ImageFont.truetype(FONT, 76)
     y = 330
     for line in wrap(args.title, tf, 960, d)[:2]:

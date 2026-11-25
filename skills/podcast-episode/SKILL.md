@@ -59,7 +59,7 @@ Then add short notes for the user:
 
 Save as `<episode>-description.md`.
 
-If asked: title ideas in the format the show uses (look at past episode folders), and chapters (`MM:SS Title`). Chapters must match the final mix: add the episode start offset that `mix.sh` prints to the raw transcript times; first line `00:00 Intro`.
+If asked: title ideas in the format the show uses (look at past episode folders), and chapters (`MM:SS Title`). Chapters must match the final mix: find each chapter's first line in the transcript (grep for a phrase), take its timestamp and add the episode start offset that `mix.sh` prints; never estimate times from memory. First line `00:00 Intro`.
 
 ## 3. Mix
 

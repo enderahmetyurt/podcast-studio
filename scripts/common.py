@@ -2,6 +2,7 @@
 import json
 import os
 import platform
+import re
 import subprocess
 import sys
 
@@ -118,24 +119,49 @@ def backend():
 def transcribe(path, language=None, words=False, model=None):
     """Return (language, segments). Each segment: {"start", "end", "text", "words": [{"w","s","e"}]}."""
     lang = None if language in (None, "", "auto") else language
+    # Not conditioning on the previous window keeps Whisper from locking into a repetition
+    # loop ("eee, eee, ...") on long recordings and losing whole minutes of speech.
     if backend() == "mlx":
         import mlx_whisper
-        r = mlx_whisper.transcribe(path, path_or_hf_repo=model or WHISPER_MLX,
-                                   language=lang, word_timestamps=words)
+        r = mlx_whisper.transcribe(path, path_or_hf_repo=model or WHISPER_MLX, language=lang,
+                                   word_timestamps=words, condition_on_previous_text=False)
         segs = [{"start": s["start"], "end": s["end"], "text": s["text"].strip(),
                  "words": [{"w": w["word"].strip(), "s": round(w["start"], 2), "e": round(w["end"], 2)}
                            for w in s.get("words", []) if w["word"].strip()]}
                 for s in r["segments"]]
-        return r.get("language", lang), segs
+        return r.get("language", lang), clean_segments(segs)
 
     from faster_whisper import WhisperModel
     m = WhisperModel(model or WHISPER_FASTER, device="auto", compute_type="auto")
-    it, info = m.transcribe(path, language=lang, word_timestamps=words, vad_filter=False)
+    it, info = m.transcribe(path, language=lang, word_timestamps=words, vad_filter=False,
+                            condition_on_previous_text=False)
     segs = [{"start": s.start, "end": s.end, "text": s.text.strip(),
              "words": [{"w": w.word.strip(), "s": round(w.start, 2), "e": round(w.end, 2)}
                        for w in (s.words or []) if w.word.strip()]}
             for s in it]
-    return info.language, segs
+    return info.language, clean_segments(segs)
+
+
+# Lines Whisper invents over silence or music (it learned them from subtitle credits).
+HALLUCINATIONS = re.compile(
+    r"altyazı\s*m\.?\s*k\.?|abone olmayı unutmayın|subtitles? by|thanks? for watching|"
+    r"please subscribe|untertitel|sous-titres|amara\.org|izlediğiniz için teşekkürler",
+    re.IGNORECASE)
+
+
+def clean_segments(segs):
+    """Drop empty segments, subtitle-credit hallucinations and runs of the same filler."""
+    out = []
+    for s in segs:
+        t = s["text"].strip()
+        bare = re.sub(r"[\W_]+", "", t.lower())
+        if not bare or HALLUCINATIONS.search(t):
+            continue
+        prev = [re.sub(r"[\W_]+", "", p["text"].lower()) for p in out[-2:]]
+        if len(t) < 12 and prev.count(bare) == 2:  # third identical short line in a row
+            continue
+        out.append(s)
+    return out
 
 
 def word_list(segments):
