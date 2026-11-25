@@ -1,0 +1,10 @@
+{
+  "name": "podcast-studio",
+  "version": "0.1.0",
+  "description": "Podcast production skills for Claude Code: transcripts, show notes, final mix, short vertical clips with captions, launch-day montage videos and platform-ready post copy. Any language.",
+  "author": { "name": "Ender Ahmet Yurt", "url": "https://github.com/enderahmetyurt" },
+  "homepage": "https://github.com/enderahmetyurt/podcast-studio",
+  "repository": "https://github.com/enderahmetyurt/podcast-studio",
+  "license": "MIT",
+  "keywords": ["podcast", "audio", "video", "whisper", "ffmpeg", "reels", "shorts", "social-media"]
+}

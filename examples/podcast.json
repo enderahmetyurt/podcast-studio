@@ -1,0 +1,36 @@
+{
+  "name": "My Show",
+  "host": "Alex Host",
+  "language": "en",
+  "website": "myshow.fm",
+  "episode_label": "S{season}E{episode}",
+  "socials": {
+    "instagram": "@myshow",
+    "x": "@myshow",
+    "youtube": "@myshow",
+    "linkedin": "https://www.linkedin.com/company/myshow",
+    "tiktok": null
+  },
+  "brand": {
+    "logo": "assets/logo.png",
+    "colors": {
+      "accent": "#FF40A0",
+      "secondary": "#3CDCFF",
+      "highlight": "#FFD60A",
+      "dark": "#080414"
+    },
+    "font_black": null,
+    "font_heavy": null
+  },
+  "audio": {
+    "theme_music": "assets/theme.mp3",
+    "outro": "assets/outro.mp3",
+    "launch_music": "assets/launch.mp3",
+    "launch_music_offset": 0,
+    "sweep": null
+  },
+  "description": {
+    "template": "In this episode my guest is <who they are, what they're known for>. We start with <first topic>, then look at <second topic>. At the heart of the conversation is <main theme>: <1-2 sentence summary>. We also touch on <other topics>. <Closing line framing the main question>.\n\nHighlights\n\n* <Topic>: <1-2 sentences>\n\nGuest:\n<Name>: <link>",
+    "footer": "Find me at:\nhttps://myshow.fm\nhttps://instagram.com/myshow\nhttps://x.com/myshow"
+  }
+}

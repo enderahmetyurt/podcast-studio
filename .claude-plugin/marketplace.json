@@ -1,0 +1,11 @@
+{
+  "name": "podcast-studio",
+  "owner": { "name": "Ender Ahmet Yurt", "url": "https://github.com/enderahmetyurt" },
+  "plugins": [
+    {
+      "name": "podcast-studio",
+      "source": "./",
+      "description": "Podcast production skills: transcripts, show notes, final mix, captioned vertical clips, launch-day montages and post copy."
+    }
+  ]
+}
