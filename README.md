@@ -1,4 +1,8 @@
-# podcast-studio
+<p align="center"><img src="docs/assets/logo.svg" alt="podcast-studio logo" width="120"></p>
+
+<h1 align="center">podcast-studio</h1>
+
+<p align="center"><a href="https://enderahmetyurt.github.io/podcast-studio/">Website</a> · <a href="#install">Install</a> · <a href="#quick-start">Quick start</a></p>
 
 Podcast production skills for [Claude Code](https://claude.com/claude-code). Drop in a recording, get back:
 

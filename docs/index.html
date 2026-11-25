@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>podcast-studio · Podcast production skills for Claude Code</title>
+<meta name="description" content="Turn a podcast recording into show notes, a final mix, captioned vertical clips, a launch-day montage and post copy for every platform. A Claude Code plugin. Any language, runs locally.">
+<meta property="og:title" content="podcast-studio">
+<meta property="og:description" content="One recording in. Show notes, final mix, captioned clips, launch montage and post copy out. A Claude Code plugin.">
+<meta property="og:image" content="https://enderahmetyurt.github.io/podcast-studio/assets/social.png">
+<meta property="og:url" content="https://enderahmetyurt.github.io/podcast-studio/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root {
+    --bg: #0B0618; --bg2: #140B2A; --line: #2A1D48; --text: #EDE9F7; --muted: #A79DC0;
+    --pink: #FF40A0; --cyan: #3CDCFF; --yellow: #FFD60A;
+    --grad: linear-gradient(120deg, var(--pink), var(--cyan));
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 var(--sans);
+    background-image: radial-gradient(900px 500px at 50% -120px, #2A1252 0%, transparent 70%);
+    background-repeat: no-repeat;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  code, pre { font-family: var(--mono); }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--text); font-weight: 700; font-size: 18px; }
+  .brand img { width: 36px; height: 36px; }
+  .brand:hover { text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; font-size: 15px; }
+  .nav-links a { color: var(--muted); }
+  .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .hero img.logo { width: 112px; height: 112px; filter: drop-shadow(0 12px 40px rgba(255, 64, 160, .35)); }
+  h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.08; margin: 24px 0 16px; letter-spacing: -0.02em; }
+  h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { color: var(--muted); font-size: 20px; max-width: 680px; margin: 0 auto 32px; }
+  .install { display: inline-flex; flex-direction: column; gap: 8px; text-align: left; max-width: 100%; }
+  .cmd {
+    display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 10px 10px 16px; font: 15px var(--mono); min-width: 0;
+  }
+  .cmd code { white-space: nowrap; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .install { width: min(560px, 100%); }
+  .cmd code::before { content: "> "; color: var(--pink); }
+  .copy {
+    flex: none; background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 6px;
+    font: 13px var(--sans); padding: 4px 10px; cursor: pointer;
+  }
+  .copy:hover { color: var(--text); border-color: var(--muted); }
+  .buttons { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; }
+  .btn.primary { background: var(--grad); color: #0B0618; }
+  .btn.ghost { border: 1px solid var(--line); color: var(--text); }
+  .btn:hover { text-decoration: none; filter: brightness(1.08); }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 36px; max-width: 720px; }
+
+  .demos { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 24px; align-items: start; }
+  figure { margin: 0; }
+  video { width: 100%; border-radius: 14px; border: 1px solid var(--line); background: #000; display: block; }
+  figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+  figcaption code { color: var(--yellow); font-size: 13px; }
+  .sound-note { font-size: 14px; color: var(--muted); margin-top: 20px; }
+
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 14px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+  td code { color: var(--yellow); white-space: nowrap; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  pre {
+    margin: 0; background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+    font-size: 13.5px; line-height: 1.55; overflow-x: auto; color: var(--text);
+  }
+  .k { color: var(--cyan); } .s { color: var(--yellow); } .c { color: var(--muted); }
+  ul.checks { list-style: none; padding: 0; margin: 0; }
+  ul.checks li { padding: 10px 0 10px 30px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.checks li::before { content: ""; position: absolute; left: 4px; top: 19px; width: 10px; height: 10px; border-radius: 50%; background: var(--grad); }
+  ul.checks b { color: var(--text); }
+  ul.checks li span { color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .demos { grid-template-columns: 1fr 1fr; }
+    .demos figure:last-child { grid-column: 1 / -1; }
+    .flow { grid-template-columns: 1fr 1fr; }
+    .two { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .nav-links { display: none; }
+    .demos, .flow { grid-template-columns: 1fr; }
+    td:nth-child(3), th:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="./"><img src="assets/logo.svg" alt=""> podcast-studio</a>
+    <div class="nav-links">
+      <a href="#demo">Demo</a>
+      <a href="#commands">Commands</a>
+      <a href="#setup">Setup</a>
+      <a href="https://github.com/enderahmetyurt/podcast-studio">GitHub</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <img class="logo" src="assets/logo.svg" alt="podcast-studio logo">
+    <h1>One recording in.<br><span>Everything you post, out.</span></h1>
+    <p class="lede">A Claude Code plugin that turns a podcast episode into show notes, a final mix, captioned vertical clips, a launch-day montage and post copy for every platform. Any language. Runs on your machine.</p>
+    <div class="install">
+      <div class="cmd"><code>/plugin marketplace add enderahmetyurt/podcast-studio</code><button class="copy" type="button">Copy</button></div>
+      <div class="cmd"><code>/plugin install podcast-studio@podcast-studio</code><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="buttons">
+      <a class="btn primary" href="https://github.com/enderahmetyurt/podcast-studio">View on GitHub</a>
+      <a class="btn ghost" href="#demo">Watch the demo</a>
+    </div>
+  </header>
+</div>
+
+<section id="demo">
+  <div class="wrap">
+    <h2>Made from one episode</h2>
+    <p class="sub">Real output from <a href="https://enderin.co">Enderinko Podcast</a> S2E6, the Turkish show this plugin was built for. Claude picked the moments, checked the cut points and wrote the titles. The scripts did the rest.</p>
+    <div class="demos">
+      <figure>
+        <video src="media/clip.mp4" poster="media/clip.jpg" controls playsinline preload="none"></video>
+        <figcaption><code>/podcast-clips</code> · 9:16 clip with title, waveform and word-by-word captions</figcaption>
+      </figure>
+      <figure>
+        <video src="media/launch-9x16.mp4" poster="media/launch-9x16.jpg" controls playsinline preload="none"></video>
+        <figcaption><code>/podcast-launch</code> · 9:16 montage for Shorts, Reels and TikTok</figcaption>
+      </figure>
+      <figure>
+        <video src="media/launch-4x5.mp4" poster="media/launch-4x5.jpg" controls playsinline preload="none"></video>
+        <figcaption><code>/podcast-launch</code> · 4:5 montage for Instagram, X and LinkedIn feeds</figcaption>
+      </figure>
+    </div>
+    <p class="sound-note">Turn the sound on: the captions follow the speech word by word.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What you get</h2>
+    <p class="sub">Claude does the editorial work: what is worth clipping, where a sentence really starts, what makes a hook. Python and ffmpeg do the media work.</p>
+    <div class="flow">
+      <div class="card"><div class="dot" style="background:var(--pink)"></div><h3>Show notes</h3><p>Transcript, description in your own format, title ideas, chapters.</p></div>
+      <div class="card"><div class="dot" style="background:#FF6FB8"></div><h3>Final mix</h3><p>Spoken intro over theme music, episode, outro. Loudness-normalized.</p></div>
+      <div class="card"><div class="dot" style="background:var(--yellow)"></div><h3>Clips</h3><p>8-10 strongest moments, cut on clean sentence boundaries, captioned.</p></div>
+      <div class="card"><div class="dot" style="background:#7FE4FF"></div><h3>Launch montage</h3><p>6-8 punchy quotes over music, intro card, end card. 4:5 and 9:16.</p></div>
+      <div class="card"><div class="dot" style="background:var(--cyan)"></div><h3>Post copy</h3><p>Instagram, X, YouTube Shorts, TikTok, LinkedIn. Guest tagged.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="commands">
+  <div class="wrap">
+    <h2>Four commands</h2>
+    <p class="sub">Or just say what you want ("make reels from this episode") and the right skill picks it up.</p>
+    <table>
+      <thead><tr><th>Command</th><th>What it does</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><code>/podcast-setup</code></td><td>Asks about your show and writes its profile: language, links, colors, logo, music, description format.</td><td>podcast.json</td></tr>
+        <tr><td><code>/podcast-episode rec.mp3 intro.m4a</code></td><td>Transcribes, writes the description, suggests titles and chapters, mixes the final episode.</td><td>description.md, final.mp3</td></tr>
+        <tr><td><code>/podcast-clips rec.mp3 cover.png</code></td><td>Finds moments, you pick, it renders captioned clips and writes copy for each platform.</td><td>clips/*.mp4, clip-copy.md</td></tr>
+        <tr><td><code>/podcast-launch .</code></td><td>Builds a launch-day montage from short quotes and writes copy, including LinkedIn.</td><td>launch-4x5.mp4, launch-9x16.mp4</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="wrap two">
+    <div>
+      <h2>Your show, your style</h2>
+      <p class="sub">Everything show-specific lives in one file. Point the setup skill at a past episode description and new ones come out in the same format.</p>
+<pre><span class="c">// podcast.json</span>
+{
+  <span class="k">"name"</span>: <span class="s">"My Show"</span>,
+  <span class="k">"language"</span>: <span class="s">"en"</span>,
+  <span class="k">"website"</span>: <span class="s">"myshow.fm"</span>,
+  <span class="k">"socials"</span>: { <span class="k">"instagram"</span>: <span class="s">"@myshow"</span>, <span class="k">"x"</span>: <span class="s">"@myshow"</span> },
+  <span class="k">"brand"</span>: {
+    <span class="k">"logo"</span>: <span class="s">"assets/logo.png"</span>,
+    <span class="k">"colors"</span>: { <span class="k">"accent"</span>: <span class="s">"#FF40A0"</span>, <span class="k">"highlight"</span>: <span class="s">"#FFD60A"</span> }
+  },
+  <span class="k">"audio"</span>: {
+    <span class="k">"theme_music"</span>: <span class="s">"assets/theme.mp3"</span>,
+    <span class="k">"outro"</span>: <span class="s">"assets/outro.mp3"</span>
+  },
+  <span class="k">"description"</span>: { <span class="k">"template"</span>: <span class="s">"..."</span>, <span class="k">"footer"</span>: <span class="s">"..."</span> }
+}</pre>
+    </div>
+    <div>
+      <h2>Good to know</h2>
+      <p class="sub">&nbsp;</p>
+      <ul class="checks">
+        <li><b>Any language Whisper supports.</b> <span>Transcripts, captions and copy follow your show's language.</span></li>
+        <li><b>Runs locally.</b> <span>mlx-whisper on Apple Silicon, faster-whisper on Linux and Windows. No upload service.</span></li>
+        <li><b>Needs Python 3.10+ and ffmpeg.</b> <span>The setup skill creates its own virtualenv.</span></li>
+        <li><b>No fonts or music bundled.</b> <span>Bring your own. Without a font, a bold system font is used.</span></li>
+        <li><b>It never posts for you.</b> <span>You get files and copy; uploading stays with you.</span></li>
+        <li><b>MIT licensed.</b> <span>Scripts work on their own too.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Built by <a href="https://github.com/enderahmetyurt">Ender Ahmet Yurt</a> for <a href="https://enderin.co">Enderinko Podcast</a>.</span>
+    <span><a href="https://github.com/enderahmetyurt/podcast-studio">GitHub</a> · MIT License</span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll(".copy").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const text = btn.previousElementSibling.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied";
+      } catch {
+        btn.textContent = "Select to copy";
+      }
+      setTimeout(() => (btn.textContent = "Copy"), 1500);
+    });
+  });
+  // Play one video at a time
+  const videos = document.querySelectorAll("video");
+  videos.forEach(v => v.addEventListener("play", () => videos.forEach(o => o !== v && o.pause())));
+</script>
+</body>
+</html>
