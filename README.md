@@ -10,6 +10,11 @@ Podcast production skills for [Claude Code](https://claude.com/claude-code). Dro
 
 Works in any language Whisper supports. Runs locally: mlx-whisper on Apple Silicon, faster-whisper everywhere else.
 
+<p align="center">
+  <img src="docs/demo.gif" alt="A captioned 9:16 clip (left) and a launch-day montage (right) made with podcast-studio" width="632">
+</p>
+<p align="center"><sub>Left: <code>/podcast-clips</code> clip with word-by-word captions. Right: <code>/podcast-launch</code> montage. Both from <a href="https://enderin.co">Enderinko Podcast</a> S2E6 (in Turkish), the show this was built for.</sub></p>
+
 ## Install
 
 ```
