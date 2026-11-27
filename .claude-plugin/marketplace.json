@@ -1,6 +1,10 @@
 {
   "name": "podcast-studio",
-  "owner": { "name": "Ender Ahmet Yurt", "url": "https://github.com/enderahmetyurt" },
+  "owner": {
+    "name": "Ender Ahmet Yurt",
+    "url": "https://github.com/enderahmetyurt"
+  },
+  "description": "Podcast production skills for Claude Code: transcripts, show notes, final mix, captioned vertical clips, launch-day montages and post copy.",
   "plugins": [
     {
       "name": "podcast-studio",

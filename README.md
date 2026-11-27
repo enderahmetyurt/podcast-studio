@@ -90,6 +90,17 @@ No fonts or music ship with the plugin. Without `brand.font_black` / `font_heavy
 
 The skills produce files and copy. Uploading and posting stay with you.
 
+## Privacy and what it downloads
+
+Your audio, transcripts and videos stay on your machine. Transcription runs locally with Whisper, and nothing is uploaded or sent to any service by the plugin's scripts. The text work (picking clips, writing descriptions and copy) is done by Claude in your Claude Code session, the same as any other conversation.
+
+What gets downloaded, and when:
+
+- **`scripts/setup.sh`** (run once by `/podcast-setup`, or the first time another skill needs it): creates a virtualenv in `~/.cache/podcast-studio-venv` and installs `pillow` plus `mlx-whisper` (Apple Silicon) or `faster-whisper` (everything else) from PyPI. It never installs system packages; if ffmpeg is missing it prints the command for you to run.
+- **First transcription**: Whisper downloads the `large-v3-turbo` model (~1.5 GB) from Hugging Face into its usual cache.
+
+Nothing else is fetched. The plugin has no hooks, no MCP servers and no telemetry.
+
 ## License
 
 MIT
